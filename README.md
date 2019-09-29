@@ -37,7 +37,7 @@ var request = JsonConvert.DeserializeObject<UpdateCustomerRequest>(HttpBody);
 
 if (request.Name.IsDefined)             //yes
 {
-    customer.Name = request.Name;
+    customer.Name = request.Name.Value;
 }
 if (request.InternalName.IsDefined)     //yes
 {
