@@ -38,10 +38,7 @@ namespace System
         /// <summary>
         /// True if a value has been set, even if it is null.
         /// </summary>
-        public bool IsDefined
-        {
-            get { return _isDefined; }
-        }
+        public bool IsDefined => _isDefined;
 
         /// <summary>
         /// Gets the value of the current <see cref="Undefinable{T}"/>. 
@@ -72,18 +69,6 @@ namespace System
                 _value = value
             };
         }
-
-        
-        /// <summary>
-        /// Used to unwrap the value.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static implicit operator T(Undefinable<T> value)
-        {
-            return value.Value;
-        }
-        
 
         /// <summary>
         /// Gets the wrapped value or the default of T.
@@ -192,56 +177,6 @@ namespace System
         }
 
         /// <summary>
-        /// Implementation of the equals operator.
-        /// </summary>
-        /// <param name="t1"></param>
-        /// <param name="t2"></param>
-        /// <returns></returns>
-        public static bool operator ==(Undefinable<T> t1, T t2)
-        {
-            if (!t1._isDefined)
-            {
-                return false;
-            }
-
-            return t1.Equals(t2);
-        }
-
-        /// <summary>
-        /// Implementation of the inequality operator.
-        /// </summary>
-        /// <returns></returns>
-        public static bool operator !=(Undefinable<T> t1, T t2)
-        {
-            return !(t1 == t2);
-        }
-
-        /// <summary>
-        /// Implementation of the equals operator.
-        /// </summary>
-        /// <param name="t1"></param>
-        /// <param name="t2"></param>
-        /// <returns></returns>
-        public static bool operator ==(T t2, Undefinable<T> t1)
-        {
-            if (!t1._isDefined)
-            {
-                return false;
-            }
-
-            return t1.Equals(t2);
-        }
-
-        /// <summary>
-        /// Implementation of the inequality operator.
-        /// </summary>
-        /// <returns></returns>
-        public static bool operator !=(T t2, Undefinable<T> t1)
-        {
-            return !(t1 == t2);
-        }
-
-        /// <summary>
         /// Implementation of the inequality operator.
         /// </summary>
         /// <returns></returns>
@@ -272,6 +207,10 @@ namespace System
         /// </summary>
         public override string ToString()
         {
+            if (!_isDefined)
+            {
+                return string.Empty;
+            }
             return _value?.ToString() ?? string.Empty;
         }
 

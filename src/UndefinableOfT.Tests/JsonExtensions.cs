@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace UndefinableOfT.Tests
 {
-    public static class JsonExtensions
+    internal static class JsonExtensions
     {
         public static bool ContainsKey(this JObject jObject, string key)
         {

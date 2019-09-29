@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace UndefinableOfT.Tests
 {
-    public class UndefinableJsonTests
+    public class UndefinableJsonSerializerDeserializerTests
     {
         [Test]
         public void Serializes_correctly()
@@ -14,7 +14,6 @@ namespace UndefinableOfT.Tests
 
             var jsonString = JsonConvert.SerializeObject(testClass, new JsonSerializerSettings
             {
-                Converters = { new UndefinableJsonConverter() },
                 ContractResolver = new UndefinableContractResolver()
             });
 
@@ -46,12 +45,7 @@ namespace UndefinableOfT.Tests
     ""OptionalStringThatHasAValue"": ""hi again"",
     ""IntThatHasAValue"": 123
 }";
-            var deserialized = JsonConvert.DeserializeObject<JsonDeserializationTestClass>(json,
-                new JsonSerializerSettings
-                {
-                    Converters = { new UndefinableJsonConverter() },
-                    ContractResolver = new UndefinableContractResolver()
-                });
+            var deserialized = JsonConvert.DeserializeObject<JsonDeserializationTestClass>(json);
             Assert.AreEqual(deserialized.NullString, null);
             Assert.AreEqual(deserialized.StringWithValue, "hi");
             Assert.AreEqual(deserialized.OptionalIntThatIsUndefinedAndExplicitlyNotSet, Undefinable<int?>.Undefined);

@@ -8,12 +8,6 @@ namespace UndefinableOfT.Tests
     public class UndefinableTests
     {
         [Test]
-        public void Can_cast_to_proper_unwrapped_value()
-        {
-            var val = (int) new Undefinable<int>(0);
-        }
-        
-        [Test]
         public void Undefined_int_that_is_undefined_resolves_undefined_values_correctly()
         {
             Undefinable<int> i = default;
@@ -133,7 +127,6 @@ namespace UndefinableOfT.Tests
         public void TestUndefinedSerializationUsingNullables(Undefinable<int?> a, Undefinable<int?> b, String expectedJson)
         {
             var json = JsonConvert.SerializeObject(new { A = a, B = b }, settings);
-
             Assert.That(json, Is.EqualTo(expectedJson));
         }
 
@@ -154,41 +147,41 @@ namespace UndefinableOfT.Tests
         public static object[] NullableAndNonNullableEqualityCases = {
             new object[] {Undefinable<int?>.Undefined, new Undefinable<int>(0), false},
             new object[] {new Undefinable<int?>(null), new Undefinable<int>(0), false},
-            new object[] {new Undefinable<int?>(123), new Undefinable<int>(123), true},
-            new object[] {Undefinable<int?>.Undefined, Undefinable<int>.Undefined, true},
+            new object[] {new Undefinable<int?>(123), new Undefinable<int>(123), true}
         };
 
         public static object[] NonNullableAndNullableEqualityCases = {
             new object[] {Undefinable<int>.Undefined, new Undefinable<int?>(null), false},
-            new object[] {new Undefinable<int>(0), new Undefinable<int?>(null), false},
             new object[] {Undefinable<int>.Undefined, Undefinable<int?>.Undefined, true},
+            new object[] {new Undefinable<int>(0), new Undefinable<int?>(null), false},
             new object[] {new Undefinable<int>(0), new Undefinable<int?>(0), true},
             new object[] {new Undefinable<int>(123), new Undefinable<int?>(123), true}
         };
-       
-        /*
+        
         [Test]
         [TestCaseSource(nameof(NonNullableAndNullableEqualityCases))]
         public void TestNonNullableAndNullableEquality(Undefinable<int> a, Undefinable<int?> b, bool expected)
         {
-            var actual = a == b;
-            Assert.That(actual, Is.EqualTo(expected));
+            //only .Equals is supported for now
+            Assert.That(a.Equals(b), Is.EqualTo(expected));
+            Assert.That(b.Equals(a), Is.EqualTo(expected));
         }
         
         [Test]
         [TestCaseSource(nameof(NullableAndNonNullableEqualityCases))]
         public void TestNullableAndNonNullableEquality(Undefinable<int?> a, Undefinable<int> b, bool expected)
         {
-            var actual = a == b;
-            Assert.That(actual, Is.EqualTo(expected));
+            //only .Equals is supported for now
+            Assert.That(a.Equals(b), Is.EqualTo(expected));
+            Assert.That(b.Equals(a), Is.EqualTo(expected));
         }
-        */
-
+        
         [Test]
         [TestCaseSource(nameof(EqualityCases))]
         public void TestEquality(Undefinable<int> a, Undefinable<int> b, bool expected)
         {
             Assert.That(a == b, Is.EqualTo(expected));
+            Assert.That(b == a, Is.EqualTo(expected));
         }
 
         [Test]
@@ -196,6 +189,7 @@ namespace UndefinableOfT.Tests
         public void TestInequality(Undefinable<int> a, Undefinable<int> b, bool expected)
         {
             Assert.That(a != b, Is.EqualTo(!expected));
+            Assert.That(b != a, Is.EqualTo(!expected));
         }
         
         [Test]
@@ -203,6 +197,7 @@ namespace UndefinableOfT.Tests
         public void TestNullableEquality(Undefinable<int?> a, Undefinable<int?> b, bool expected)
         {
             Assert.That(a == b, Is.EqualTo(expected));
+            Assert.That(b == a, Is.EqualTo(expected));
         }
 
         [Test]
@@ -210,6 +205,31 @@ namespace UndefinableOfT.Tests
         public void TestNullableInequality(Undefinable<int?> a, Undefinable<int?> b, bool expected)
         {
             Assert.That(a != b, Is.EqualTo(!expected));
+            Assert.That(b != a, Is.EqualTo(!expected));
+        }
+        
+        public class Customer
+        {
+            public string Name { get; set; }
+        }
+        public class UpdateCustomerRequest
+        {
+            public Undefinable<string> Name { get; set; }
+            public Undefinable<int?> NetTermsInDays { get; set; }
+        }
+
+        [Test]
+        public void askdljfkalsdf()
+        {
+
+            var customer = new Customer();
+            var request = JsonConvert.DeserializeObject<UpdateCustomerRequest>("{}");
+
+            if (request.Name.IsDefined)
+            {
+                customer.Name = request.Name.Value;
+            }
+
         }
     }
 }
